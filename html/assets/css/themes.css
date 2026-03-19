@@ -1,0 +1,107 @@
+/* ===== Theme Variables & Overrides ===== */
+
+:root {
+  --glass-bg: rgba(10, 10, 15, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --glass-blur: blur(20px);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.5);
+  --accent-blue: #3b82f6;
+  --accent-green: #4ade80;
+  --accent-red: #ef4444;
+  --accent-yellow: #fbbf24;
+}
+
+/* ===== Themes ===== */
+body[data-theme="dark"] { /* default, no overrides needed */ }
+
+body[data-theme="midnight"] {
+  --glass-bg: rgba(10, 15, 40, 0.92);
+  --glass-border: rgba(100, 130, 255, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 10, 40, 0.4)
+}
+body[data-theme="midnight"] .circle-progress circle { filter: saturate(1.3) }
+body[data-theme="midnight"] .progressBar { background: linear-gradient(90deg, #6366f1, #818cf8, #c084fc) }
+body[data-theme="midnight"] .direction-badge { background: rgba(99,102,241,0.2); color: #a5b4fc }
+
+body[data-theme="neon"] {
+  --glass-bg: rgba(0, 0, 0, 0.92);
+  --glass-border: rgba(0, 255, 136, 0.1);
+  --glass-shadow: 0 0 20px rgba(0, 255, 136, 0.08)
+}
+body[data-theme="neon"] .circle-progress circle { filter: brightness(1.3) drop-shadow(0 0 3px currentColor) }
+body[data-theme="neon"] .speed { text-shadow: 0 0 20px rgba(0,255,136,0.3); color: #00ff88 }
+body[data-theme="neon"] .progressBar { background: linear-gradient(90deg, #00ff88, #00e5ff, #ff0055); box-shadow: 0 0 10px #00ff88 }
+body[data-theme="neon"] .direction-badge { background: rgba(0,255,136,0.15); color: #00ff88 }
+
+body[data-theme="minimal"] {
+  --glass-bg: rgba(20, 20, 20, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.03);
+  --glass-shadow: none;
+  --glass-blur: blur(10px)
+}
+body[data-theme="minimal"] .icon-speedo div { background: transparent }
+body[data-theme="minimal"] .circle-bg circle { stroke: rgba(255,255,255,0.03) }
+
+/* ===== Light Mode ===== */
+body.light-mode #right-panel,
+body.light-mode #status-panel,
+body.light-mode .speedo,
+body.light-mode #voice-indicator,
+body.light-mode .notif,
+body.light-mode #money-panel,
+body.light-mode #weapon-bar,
+body.light-mode .effect-pill,
+body.light-mode #progress-container {
+  background: rgba(255,255,255,0.65); border-color: rgba(0,0,0,0.08)
+}
+body.light-mode .header-stat, body.light-mode .speed, body.light-mode .gear-value { color: #1a1a1a; text-shadow: none }
+body.light-mode .speed-unit, body.light-mode .street-name, body.light-mode .gear-label,
+body.light-mode .fuel-text, body.light-mode .damage-label { color: rgba(0,0,0,0.4) }
+body.light-mode .circle-bg circle { stroke: rgba(0,0,0,0.05) }
+body.light-mode .circle-icon { color: rgba(0,0,0,0.5) }
+body.light-mode .notif { color: #1a1a1a }
+body.light-mode .money-cash-value, body.light-mode .money-bank-value { color: #1a1a1a }
+body.light-mode .progress-label { color: rgba(0,0,0,0.5) }
+body.light-mode .effect-label { color: #1a1a1a }
+
+body.light-mode #settings-panel {
+  background: rgba(255,255,255,0.85); border-color: rgba(0,0,0,0.08)
+}
+body.light-mode .settings-header h2 { color: #1a1a1a }
+body.light-mode .settings-section h3 { color: rgba(0,0,0,0.4) }
+body.light-mode .toggle-row span { color: #1a1a1a }
+body.light-mode .theme-btn { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); color: #1a1a1a }
+body.light-mode .speed-btn { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); color: #1a1a1a }
+body.light-mode .switch .slider { background: rgba(0,0,0,0.1) }
+body.light-mode .slider-row input[type="range"] { background: rgba(0,0,0,0.1) }
+
+/* Light mode - compass bar */
+body.light-mode .compass-strip,
+body.light-mode .compass-info {
+  background: rgba(255,255,255,0.65); border-color: rgba(0,0,0,0.08)
+}
+body.light-mode .compass-track .compass-mark { color: rgba(0,0,0,0.4) }
+body.light-mode .compass-track .compass-mark.cardinal { color: #1a1a1a }
+body.light-mode .compass-track .compass-mark .compass-tick { background: rgba(0,0,0,0.1) }
+body.light-mode .compass-track .compass-mark.cardinal .compass-tick { background: rgba(0,0,0,0.3) }
+body.light-mode .compass-street { color: #1a1a1a }
+body.light-mode .compass-zone { color: rgba(0,0,0,0.4) }
+
+/* Light mode - circular progress */
+body.light-mode .circular-progress-inner,
+body.light-mode .circular-label {
+  background: rgba(255,255,255,0.65); border-color: rgba(0,0,0,0.08)
+}
+body.light-mode .circular-label { color: #1a1a1a }
+body.light-mode .circular-icon { color: #1a1a1a }
+
+/* Neon theme compass */
+body[data-theme="neon"] .compass-postal { background: rgba(0,255,136,0.15); color: #00ff88 }
+body[data-theme="neon"] .compass-track .compass-mark.cardinal { color: #00ff88 }
+body[data-theme="neon"] .compass-center-line { background: #00ff88; box-shadow: 0 0 6px #00ff88 }
+
+/* Midnight theme compass */
+body[data-theme="midnight"] .compass-postal { background: rgba(99,102,241,0.2); color: #a5b4fc }
+body[data-theme="midnight"] .compass-track .compass-mark.cardinal { color: #a5b4fc }

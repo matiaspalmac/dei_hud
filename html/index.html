@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <title>dei_hud</title>
+</head>
+<body style="background:transparent!important;margin:0;padding:0">
+  <!-- Compass Bar (top of screen, BF/CoD style) -->
+  <div id="compass-bar" style="display:none">
+    <div class="compass-strip">
+      <div class="compass-track" id="compass-track"></div>
+      <div class="compass-waypoint" id="compass-waypoint" style="display:none">&#9660;</div>
+    </div>
+    <div class="compass-info">
+      <span class="compass-postal" id="compass-postal"></span>
+      <span class="compass-street" id="compass-street"></span>
+      <span class="compass-zone" id="compass-zone"></span>
+    </div>
+  </div>
+
+  <!-- Screen effect overlays -->
+  <div class="health-vignette" id="health-vignette"></div>
+  <div class="underwater-overlay" id="underwater-overlay"></div>
+  <div class="stress-overlay" id="stress-overlay"></div>
+
+  <!-- Circular Progress -->
+  <div id="circular-progress" style="display:none">
+    <div class="circular-progress-inner">
+      <svg class="circular-svg" viewBox="0 0 120 120">
+        <circle class="circular-bg-circle" cx="60" cy="60" r="50"/>
+        <circle class="circular-fill-circle" cx="60" cy="60" r="50"/>
+      </svg>
+      <div class="circular-icon" id="circular-icon"></div>
+    </div>
+    <div class="circular-label" id="circular-label"></div>
+  </div>
+
+  <div class="container">
+    <header id="header" data-draggable="header">
+      <div id="right-panel">
+        <div class="header-stat" id="id-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <span class="id">0</span>
+        </div>
+        <div class="header-stat jobrp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+          <span class="job">Desempleado</span>
+        </div>
+        <div class="header-stat radio-stat" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/><circle cx="12" cy="12" r="2"/></svg>
+          <span class="radio-channel">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Money HUD -->
+    <div id="money-panel" data-draggable="money">
+      <div class="money-row money-cash">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+        <span class="money-cash-value">$0</span>
+        <div class="money-change money-cash-change"></div>
+      </div>
+      <div class="money-row money-bank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M5 6l7-3 7 3"/><path d="M4 10v11"/><path d="M20 10v11"/><path d="M8 14v4"/><path d="M12 14v4"/><path d="M16 14v4"/></svg>
+        <span class="money-bank-value">$0</span>
+        <div class="money-change money-bank-change"></div>
+      </div>
+    </div>
+
+    <div id="voice-indicator" style="display:none">
+      <div class="voice-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+      </div>
+      <div class="voice-bars">
+        <span class="voice-bar"></span><span class="voice-bar"></span><span class="voice-bar"></span>
+      </div>
+    </div>
+
+    <!-- Effects container (above status panel) -->
+    <div id="effects-container" data-draggable="effects"></div>
+
+    <div id="status-panel" data-draggable="status">
+      <div class="circle-stat" data-stat="health" data-tooltip="Vida">
+        <svg class="circle-bg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <svg class="circle-progress" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <div class="circle-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+        <span class="stat-tooltip">100</span>
+      </div>
+      <div class="circle-stat" data-stat="armor" data-tooltip="Armadura">
+        <svg class="circle-bg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <svg class="circle-progress" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <div class="circle-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg></div>
+        <span class="stat-tooltip">0</span>
+      </div>
+      <div class="circle-stat" data-stat="stamina" data-tooltip="Estamina">
+        <svg class="circle-bg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <svg class="circle-progress" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <div class="circle-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M11 21h-1l1-7H7.5c-.88 0-.33-.75-.31-.78C8.48 10.94 10.42 7.54 13.01 3h1l-1 7h3.51c.4 0 .62.19.4.66C12.97 17.55 11 21 11 21z"/></svg></div>
+        <span class="stat-tooltip">100</span>
+      </div>
+      <div class="circle-stat" data-stat="thirst" data-tooltip="Sed">
+        <svg class="circle-bg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <svg class="circle-progress" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <div class="circle-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2C20 10.48 17.33 6.55 12 2z"/></svg></div>
+        <span class="stat-tooltip">100</span>
+      </div>
+      <div class="circle-stat" data-stat="hunger" data-tooltip="Hambre">
+        <svg class="circle-bg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <svg class="circle-progress" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <div class="circle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+        <span class="stat-tooltip">100</span>
+      </div>
+      <div class="circle-stat" data-stat="oxygen" style="display:none" data-tooltip="Oxigeno">
+        <svg class="circle-bg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <svg class="circle-progress" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <div class="circle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M8 12a4 4 0 018 0"/></svg></div>
+        <span class="stat-tooltip">100</span>
+      </div>
+      <div class="circle-stat" data-stat="stress" style="display:none" data-tooltip="Estres">
+        <svg class="circle-bg" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <svg class="circle-progress" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/></svg>
+        <div class="circle-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+        <span class="stat-tooltip">0</span>
+      </div>
+    </div>
+
+    <div class="speedo" data-draggable="speedo">
+      <div class="speedo-compass" style="display:none">
+        <span class="street-name"></span>
+        <span class="direction-badge"></span>
+      </div>
+      <div class="speedo-top">
+        <div class="speedo-speed">
+          <span class="speed">0</span>
+          <span class="speed-unit">KM/H</span>
+        </div>
+        <div class="speedo-right">
+          <div class="speedo-gear" style="display:none">
+            <span class="gear-label">G</span>
+            <span class="gear-value">N</span>
+          </div>
+          <div class="cruise-speed" style="display:none">
+            <span class="cruise-label">CC</span>
+            <span class="cruise-value">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="loadbar"><div class="progressBar"></div></div>
+      <div class="damage-bars" style="display:none">
+        <div class="damage-row">
+          <span class="damage-label">ENG</span>
+          <div class="damage-track"><div class="damage-fill engine-damage"></div></div>
+        </div>
+        <div class="damage-row">
+          <span class="damage-label">BDY</span>
+          <div class="damage-track"><div class="damage-fill body-damage"></div></div>
+        </div>
+      </div>
+      <div class="speedo-bottom">
+        <div class="icon-speedo">
+          <div class="engine"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg></div>
+          <div class="light"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
+          <div class="seatbelt-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+          <div class="harness-icon" style="display:none"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M12 6l-4 4h3v4h2v-4h3z"/></svg></div>
+          <div class="lock-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div>
+          <div class="nos-icon" style="display:none"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 14h-2v-4H9.5c-.28 0-.5-.22-.5-.5v-3c0-.28.22-.5.5-.5h5c.28 0 .5.22.5.5V17z"/></svg></div>
+          <div class="limiter"><svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M20.38 8.57l-1.23 1.85a8 8 0 01-.22 7.58H5.07A8 8 0 0115.58 6.85l1.85-1.23A10 10 0 003.35 19a2 2 0 001.72 1h13.85a2 2 0 001.74-1 10 10 0 00-.27-10.44z"/><path d="M10.59 15.41a2 2 0 002.83 0l5.66-8.49-8.49 5.66a2 2 0 000 2.83z"/></svg></div>
+        </div>
+        <div class="signal-row" style="display:none">
+          <div class="signal signal-left">&#9664;</div>
+          <div class="signal signal-hazard">&#9888;</div>
+          <div class="signal signal-right">&#9654;</div>
+        </div>
+        <div class="fuel-bar" style="display:none">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="11" height="11" class="fuel-icon"><path d="M19.77 7.23l.01-.01-3.72-3.72L15 4.56l2.11 2.11c-.94.36-1.61 1.26-1.61 2.33 0 1.38 1.12 2.5 2.5 2.5.36 0 .69-.08 1-.21v7.21c0 .55-.45 1-1 1s-1-.45-1-1V14c0-1.1-.9-2-2-2h-1V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v16h10v-7.5h1.5v5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V9c0-.69-.28-1.32-.73-1.77zM12 10H6V5h6v5z"/></svg>
+          <div class="fuel-track"><div class="fuel-fill"></div></div>
+          <span class="fuel-text">100</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="weapon-bar" style="display:none" data-draggable="weapon">
+      <div class="weapon-info">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M7.5 3.5C5.57 3.5 4 5.07 4 7v2.5L2 12v3h4v3l2 2v-5h3l5-4V7c0-1.93-1.57-3.5-3.5-3.5S9 5.07 9 7H7c0-1.93-1.57-3.5-3.5-3.5z"/></svg>
+        <span class="weapon-ammo"><span class="ammo-clip">0</span><span class="ammo-sep">/</span><span class="ammo-reserve">0</span></span>
+      </div>
+      <div class="ammo-bar-track"><div class="ammo-bar-fill"></div></div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progress-container">
+      <div class="progress-label"></div>
+      <div class="progress-track"><div class="progress-fill"></div></div>
+    </div>
+
+    <div class="stamina-vignette"></div>
+    <div class="drug-overlay"></div>
+    <div class="crash-overlay"></div>
+    <div id="notif-container"></div>
+    <div class="edit-banner" style="display:none">Arrastra los paneles &bull; <button onclick="savePositions()">Guardar</button> &bull; <button onclick="cancelEdit()">Cancelar</button></div>
+  </div>
+
+  <!-- Settings Panel (outside container so it works independently) -->
+  <div id="settings-overlay">
+    <div id="settings-panel">
+      <div class="settings-header">
+        <h2>Ajustes del HUD</h2>
+        <button class="settings-close" id="settings-close-btn">&times;</button>
+      </div>
+      <div class="settings-body">
+        <div class="settings-section">
+          <h3>Tema</h3>
+          <div class="theme-grid">
+            <button class="theme-btn" data-theme="dark"><span class="theme-dot" style="background:#0a0a0f"></span>Oscuro</button>
+            <button class="theme-btn" data-theme="midnight"><span class="theme-dot" style="background:#0a0f28"></span>Medianoche</button>
+            <button class="theme-btn" data-theme="neon"><span class="theme-dot" style="background:#00ff88"></span>Neon</button>
+            <button class="theme-btn" data-theme="minimal"><span class="theme-dot" style="background:#141414"></span>Minimal</button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Modo</h3>
+          <div class="toggle-row">
+            <span>Modo claro</span>
+            <label class="switch"><input type="checkbox" id="setting-lightmode"><span class="slider"></span></label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Escala</h3>
+          <div class="slider-row">
+            <input type="range" id="setting-scale" min="0.5" max="2.0" step="0.1" value="1.0">
+            <span class="slider-value" id="scale-value">1.0</span>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Unidad de velocidad</h3>
+          <div class="speed-toggle">
+            <button class="speed-btn" data-unit="kmh">KM/H</button>
+            <button class="speed-btn active" data-unit="mph">MPH</button>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Opciones</h3>
+          <div class="toggle-row"><span>Mostrar voz</span><label class="switch"><input type="checkbox" id="setting-voice" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><span>Mostrar radio</span><label class="switch"><input type="checkbox" id="setting-radio" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><span>Mostrar arma</span><label class="switch"><input type="checkbox" id="setting-weapon" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><span>Mostrar estres</span><label class="switch"><input type="checkbox" id="setting-stress" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><span>Ocultar al maximo</span><label class="switch"><input type="checkbox" id="setting-hidefull" checked><span class="slider"></span></label></div>
+        </div>
+      </div>
+      <div class="settings-footer">
+        <button class="settings-save" id="settings-save-btn">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
